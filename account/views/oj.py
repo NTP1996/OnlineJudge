@@ -213,11 +213,12 @@ class UserRegisterAPI(APIView):
         User register api
         """
         if not SysOptions.allow_register:
-            return self.error("Register function has been disabled by admin")
+            return self.error("对不起，注册功能已经被管理员关闭了")
 
         data = request.data
         data["username"] = data["username"].lower()
         data["email"] = data["email"].lower()
+        # 验证码
         captcha = Captcha(request)
         if not captcha.check(data["captcha"]):
             return self.error("Invalid captcha")
@@ -229,7 +230,7 @@ class UserRegisterAPI(APIView):
         user.set_password(data["password"])
         user.save()
         UserProfile.objects.create(user=user)
-        return self.success("Succeeded")
+        return self.success("欢迎加入黄淮学院Online Judge,请登陆")
 
 
 class UserChangeEmailAPI(APIView):

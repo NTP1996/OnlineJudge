@@ -11,7 +11,7 @@ class AnnouncementAdminAPI(APIView):
     @super_admin_required
     def post(self, request):
         """
-        publish announcement
+        发布公告
         """
         data = request.data
         announcement = Announcement.objects.create(title=data["title"],
@@ -24,7 +24,7 @@ class AnnouncementAdminAPI(APIView):
     @super_admin_required
     def put(self, request):
         """
-        edit announcement
+        编辑公告
         """
         data = request.data
         try:
@@ -41,7 +41,7 @@ class AnnouncementAdminAPI(APIView):
     @super_admin_required
     def get(self, request):
         """
-        get announcement list / get one announcement
+        get 公告（ONE or LIST）
         """
         announcement_id = request.GET.get("id")
         if announcement_id:

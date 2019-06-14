@@ -24,7 +24,7 @@ class ContestAnnouncementListAPI(APIView):
     def get(self, request):
         contest_id = request.GET.get("contest_id")
         if not contest_id:
-            return self.error("Invalid parameter, contest_id is required")
+            return self.error("Invalid parameter, contest_id is required 未获得contest_id")
         data = ContestAnnouncement.objects.select_related("created_by").filter(contest_id=contest_id, visible=True)
         max_id = request.GET.get("max_id")
         if max_id:
@@ -68,6 +68,9 @@ class ContestListAPI(APIView):
 
 
 class ContestPasswordVerifyAPI(APIView):
+    """
+    比赛密码校验
+    """
     @validate_serializer(ContestPasswordVerifySerializer)
     @login_required
     def post(self, request):

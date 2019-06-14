@@ -83,12 +83,12 @@ def check_contest_permission(check_type="details"):
             if not user.is_authenticated:
                 return self.error("Please login first.")
 
-            # creator or owner
+            # 所有者
             if user.is_contest_admin(self.contest):
                 return func(*args, **kwargs)
 
             if self.contest.contest_type == ContestType.PASSWORD_PROTECTED_CONTEST:
-                # password error
+                # 密码错误
                 if self.contest.id not in request.session.get("accessible_contests", []):
                     return self.error("Password is required.")
 

@@ -24,6 +24,10 @@ from ..serializers import (ContestAnnouncementSerializer, ContestAdminSerializer
 class ContestAPI(APIView):
     @validate_serializer(CreateConetestSeriaizer)
     def post(self, request):
+        """
+
+       创建比赛
+        """
         data = request.data
         data["start_time"] = dateutil.parser.parse(data["start_time"])
         data["end_time"] = dateutil.parser.parse(data["end_time"])
@@ -42,6 +46,9 @@ class ContestAPI(APIView):
 
     @validate_serializer(EditConetestSeriaizer)
     def put(self, request):
+        """
+        编辑比赛
+        """
         data = request.data
         try:
             contest = Contest.objects.get(id=data.pop("id"))
@@ -65,10 +72,16 @@ class ContestAPI(APIView):
 
         for k, v in data.items():
             setattr(contest, k, v)
+            # setattr()函数对应函数getattr()，用于设置属性值，该属性不一定是存在的。
         contest.save()
         return self.success(ContestAdminSerializer(contest).data)
 
     def get(self, request):
+
+        """
+        get 一个比赛（ID）
+        """
+
         contest_id = request.GET.get("id")
         if contest_id:
             try:
@@ -92,7 +105,7 @@ class ContestAnnouncementAPI(APIView):
     @validate_serializer(CreateContestAnnouncementSerializer)
     def post(self, request):
         """
-        Create one contest_announcement.
+        创建 比赛-公告.
         """
         data = request.data
         try:
@@ -108,7 +121,7 @@ class ContestAnnouncementAPI(APIView):
     @validate_serializer(EditContestAnnouncementSerializer)
     def put(self, request):
         """
-        update contest_announcement
+        更新比赛公告
         """
         data = request.data
         try:
@@ -123,7 +136,7 @@ class ContestAnnouncementAPI(APIView):
 
     def delete(self, request):
         """
-        Delete one contest_announcement.
+        删除 比赛-公告.
         """
         contest_announcement_id = request.GET.get("id")
         if contest_announcement_id:
@@ -136,7 +149,7 @@ class ContestAnnouncementAPI(APIView):
 
     def get(self, request):
         """
-        Get one contest_announcement or contest_announcement list.
+        Get 比赛公告（ONE or LIST）.
         """
         contest_announcement_id = request.GET.get("id")
         if contest_announcement_id:

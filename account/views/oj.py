@@ -66,6 +66,7 @@ class AvatarUploadAPI(APIView):
 
     @login_required
     def post(self, request):
+
         form = ImageUploadForm(request.POST, request.FILES)
         if form.is_valid():
             avatar = form.cleaned_data["image"]
@@ -156,7 +157,7 @@ class UserLoginAPI(APIView):
     @validate_serializer(UserLoginSerializer)
     def post(self, request):
         """
-        User login api
+        用户登陆 api
         """
         data = request.data
         user = auth.authenticate(username=data["username"], password=data["password"])
@@ -191,7 +192,7 @@ class UsernameOrEmailCheck(APIView):
     @validate_serializer(UsernameOrEmailCheckSerializer)
     def post(self, request):
         """
-        check username or email is duplicate
+        未完成
         """
         data = request.data
         # True means already exist.
@@ -209,9 +210,7 @@ class UsernameOrEmailCheck(APIView):
 class UserRegisterAPI(APIView):
     @validate_serializer(UserRegisterSerializer)
     def post(self, request):
-        """
-        User register api
-        """
+
         if not SysOptions.allow_register:
             return self.error("对不起，注册功能已经被管理员关闭了")
 
@@ -260,7 +259,7 @@ class UserChangePasswordAPI(APIView):
     @login_required
     def post(self, request):
         """
-        User change password api
+        修改密码 API
         """
         data = request.data
         username = request.user.username

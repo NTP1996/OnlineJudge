@@ -18,11 +18,12 @@ from ..serializers import ImportUserSeralizer
 
 
 class UserAdminAPI(APIView):
+    # 装饰器 需求超级用户
     @validate_serializer(ImportUserSeralizer)
     @super_admin_required
     def post(self, request):
         """
-        Import User
+        添加用户
         """
         data = request.data["users"]
 
@@ -38,21 +39,20 @@ class UserAdminAPI(APIView):
                 UserProfile.objects.bulk_create([UserProfile(user=user) for user in ret])
             return self.success()
         except IntegrityError as e:
-            # Extract detail from exception message
-            #    duplicate key value violates unique constraint "user_username_key"
-            #    DETAIL:  Key (username)=(root11) already exists.
+
             return self.error(str(e).split("\n")[1])
 
     @validate_serializer(EditUserSerializer)
     @super_admin_required
     def put(self, request):
         """
-        Edit user api
+        修改用户
         """
         data = request.data
         try:
             user = User.objects.get(id=data["id"])
         except User.DoesNotExist:
+            #重复
             return self.error("User does not exist")
         if User.objects.filter(username=data["username"].lower()).exclude(id=user.id).exists():
             return self.error("Username already exists")
@@ -103,7 +103,9 @@ class UserAdminAPI(APIView):
     def get(self, request):
         """
         User list api / Get user by id
+        （KEYWORD）获得用户列表和根据ID查找
         """
+        # 根据ID查找
         user_id = request.GET.get("id")
         if user_id:
             try:
@@ -113,7 +115,7 @@ class UserAdminAPI(APIView):
             return self.success(UserAdminSerializer(user).data)
 
         user = User.objects.all().order_by("-create_time")
-
+        # KEYWORD查找
         keyword = request.GET.get("keyword", None)
         if keyword:
             user = user.filter(Q(username__icontains=keyword) |
@@ -137,7 +139,7 @@ class GenerateUserAPI(APIView):
     @super_admin_required
     def get(self, request):
         """
-        download users excel
+         下载users excel
         """
         file_id = request.GET.get("file_id")
         if not file_id:
@@ -159,7 +161,7 @@ class GenerateUserAPI(APIView):
     @super_admin_required
     def post(self, request):
         """
-        Generate User
+        Excel 上传用户 User
         """
         data = request.data
         number_max_length = max(len(str(data["number_from"])), len(str(data["number_to"])))

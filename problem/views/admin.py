@@ -211,7 +211,7 @@ class ProblemAPI(ProblemBase):
         if error_info:
             return self.error(error_info)
 
-        # todo check filename and score info
+        # todo 检查文件名 and score info
         tags = data.pop("tags")
         data["created_by"] = request.user
         problem = Problem.objects.create(**data)
@@ -254,6 +254,9 @@ class ProblemAPI(ProblemBase):
     @problem_permission_required
     @validate_serializer(EditProblemSerializer)
     def put(self, request):
+        """
+       编辑问题
+        """
         data = request.data
         problem_id = data.pop("id")
 
@@ -272,7 +275,7 @@ class ProblemAPI(ProblemBase):
         error_info = self.common_checks(request)
         if error_info:
             return self.error(error_info)
-        # todo check filename and score info
+        # todo 检查文件名 and score info
         tags = data.pop("tags")
         data["languages"] = list(data["languages"])
 
@@ -305,7 +308,6 @@ class ProblemAPI(ProblemBase):
             shutil.rmtree(d, ignore_errors=True)
         problem.delete()
         return self.success()
-
 
 class ContestProblemAPI(ProblemBase):
     @validate_serializer(CreateContestProblemSerializer)

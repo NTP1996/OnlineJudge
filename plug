@@ -1,0 +1,10 @@
+ python3 python3-pip 
+pip install ->> Django  raven envelopes rest_framework(djangorestframework) django_dramatiq   redis django_dbconn_retry qrcode otpauth xlsxwriter django_redis python-dateutil jsonfield
+
+|sudo apt-get install libpq-dev python-dev
+|-psycopg2
+
+Redis
+
+postgreSQL
+注意 liunx用户postgres 和 pstgresql 中的postgres 密码并不一定相同 注意两个用户之间的区别
